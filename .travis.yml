@@ -31,5 +31,13 @@ env:
 before_install:
 - travis/install-s2i.sh
 - export PATH="${PATH}:${HOME}/openresty/bin:${HOME}/openresty/luajit/bin:${HOME}/openresty/nginx/sbin:${HOME}/bin:${HOME}/.luarocks/bin"
+before_script:
+- |
+   if [[ "$TRAVIS_CPU_ARCH" == "ppc64le" ]]; then
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+    sudo apt-get update
+    sudo apt-get install yarn
+   fi
 script:
 - make test-doc
